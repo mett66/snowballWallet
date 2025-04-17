@@ -2,8 +2,6 @@
 'use client';
 import React, { use, useEffect, useState } from 'react';
 
-
-
 import { toast } from 'react-hot-toast';
 
 import { client } from "../../../client";
