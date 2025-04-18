@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
  
 
-    const tokenId = BigInt("1");
+    const tokenId = BigInt("0");
 
 
 
@@ -129,7 +129,7 @@ export async function GET(request: NextRequest) {
       }
     );
   
-    const snowballWalletPrivateKey = process.env.SNOWBALL_WALLET_PRIVATE_KEY || "";
+    const snowballWalletPrivateKey = process.env.SNOWBALL_REWARD_WALLET_PRIVATE_KEY || "";
   
  
 
@@ -159,8 +159,8 @@ export async function GET(request: NextRequest) {
     const snowballWalletAddress = account.address;
   
     console.log("snowballWalletAddress: ", snowballWalletAddress);
-    // 0xef236138f40fadCac5Af0E01bB51612ad116C91f
-
+  
+    // 0x35C482f619D3072c0fd6891E249f8BeCCB4e2FCb
 
 
 
