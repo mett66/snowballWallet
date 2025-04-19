@@ -159,7 +159,7 @@ const contractAddressEthereum = "0xdac17f958d2ee523a2206206994597c13d831ec7"; //
 const contractAddressDCTC = "0x76856Fd779AcE7C64297F9F662D3303e09dB269f"; // DCTC on Polygon
 
 
-const erc1155ContractAddress = "0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6";
+//const erc1155ContractAddress = "0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6";
 
 
 
@@ -250,12 +250,13 @@ function IndexPage(
 
 
 
-
+  /*
   const contractErc1155 = getContract({
     client,
     chain: params.chain === "arbitrum" ? arbitrum : params.chain === "polygon" ? polygon : params.chain === "ethereum" ? ethereum : polygon,
     address: erc1155ContractAddress,
-});
+  });
+  */
 
 
 
@@ -1000,6 +1001,8 @@ function IndexPage(
   const [loadingOwnedNfts, setLoadingOwnedNfts] = useState(false);
 
   useEffect(() => {
+
+      /*
       const fetchOwnedNFTs = async () => {
 
           setLoadingOwnedNfts(true);
@@ -1022,6 +1025,42 @@ function IndexPage(
       if (address && contractErc1155) {
           fetchOwnedNFTs();
       }
+      */
+
+      // /api/snowball/getAgentNFTByWalletAddress
+      
+      const fetchOwnedNFTs = async () => {
+
+          setLoadingOwnedNfts(true);
+
+          const response = await fetch("/api/snowball/getAgentNFTByWalletAddress", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                  walletAddress: address,
+              }),
+          });
+
+          const data = await response.json();
+
+          //console.log("data", data);
+
+          if (data.result) {
+              setOwnedNfts(data.result.ownedNfts);
+          }
+
+          setLoadingOwnedNfts(false);
+
+      };
+
+      if (address) {
+          fetchOwnedNFTs();
+      }
+
+
+
   }, [address]);
 
 
@@ -1712,7 +1751,7 @@ function IndexPage(
 
 
                                   <div className="w-1/4 flex flex-row gap-2 items-center justify-start">
-                                      {nft.id.toString() === "0" ? (
+                                      {nft.tokenId === "0" ? (
                                           <Image
                                               src="/logo-snowbot300.png"
                                               alt="NFT"
@@ -1738,7 +1777,7 @@ function IndexPage(
                                           이름
                                       </div>
                                       <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                          {nft.metadata?.name}
+                                          {nft.name}
                                       </div>
                                     </div>
 
@@ -1747,7 +1786,7 @@ function IndexPage(
                                           계약번호
                                       </div>
                                       <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                          #{nft.id.toString()}
+                                          #{nft.tokenId}
                                       </div>
                                     </div>
 
@@ -1756,7 +1795,7 @@ function IndexPage(
                                           수량
                                       </div>
                                       <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                          {nft.quantityOwned.toString()} 개
+                                          {nft.balance} 개
                                       </div>
                                     </div>
 

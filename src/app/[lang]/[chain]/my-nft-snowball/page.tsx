@@ -575,6 +575,8 @@ function AgentPage(
 
             
             // fetch the NFTs again
+
+            /*
             setLoadingOwnedNfts(true);
             const nfts = await getOwnedNFTs({
                 contract: erc1155Contract,
@@ -584,6 +586,34 @@ function AgentPage(
             });
             setOwnedNfts(nfts);
             setLoadingOwnedNfts(false);
+            */
+            // /api/snowball/getAgentNFTByWalletAddress
+
+            setLoadingOwnedNfts(true);
+            const response = await fetch("/api/snowball/getAgentNFTByWalletAddress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    walletAddress: address,
+                }),
+            });
+            const data = await response.json();
+            //console.log("data", data);
+            if (data.result) {
+                setOwnedNfts(data.result.ownedNfts);
+            } else {
+                setOwnedNfts([]);
+            }
+            setLoadingOwnedNfts(false);
+
+
+
+
+
+
+
 
 
         } catch (error) {
@@ -613,6 +643,7 @@ function AgentPage(
     const [ownedNfts, setOwnedNfts] = useState([] as any[]);
     const [loadingOwnedNfts, setLoadingOwnedNfts] = useState(false);
 
+    /*
     useEffect(() => {
         const fetchOwnedNFTs = async () => {
 
@@ -638,6 +669,37 @@ function AgentPage(
             fetchOwnedNFTs();
         }
     }, [address, erc1155ContractAddress]);
+    */
+
+    // // /api/snowball/getAgentNFTByWalletAddress
+    useEffect(() => {
+        const fetchOwnedNFTs = async () => {
+
+            setLoadingOwnedNfts(true);
+            const response = await fetch("/api/snowball/getAgentNFTByWalletAddress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    walletAddress: address,
+                }),
+            });
+            const data = await response.json();
+            //console.log("data", data);
+            if (data.result) {
+                setOwnedNfts(data.result.ownedNfts);
+            } else {
+                setOwnedNfts([]);
+            }
+            setLoadingOwnedNfts(false);
+
+        };
+
+        if (address) {
+            fetchOwnedNFTs();
+        }
+    }, [address]);
 
 
     //console.log("ownedNfts", ownedNfts);
@@ -796,6 +858,7 @@ function AgentPage(
 
 
             // fetch the NFTs again
+            /*
             setLoadingOwnedNfts(true);
             const nfts = await getOwnedNFTs({
                 contract: erc1155Contract,
@@ -805,6 +868,31 @@ function AgentPage(
             });
             setOwnedNfts(nfts);
             setLoadingOwnedNfts(false);
+            */
+            // /api/snowball/getAgentNFTByWalletAddress
+            setLoadingOwnedNfts(true);
+            const response = await fetch("/api/snowball/getAgentNFTByWalletAddress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    walletAddress: address,
+                }),
+            });
+            const data = await response.json();
+            //console.log("data", data);
+            if (data.result) {
+                setOwnedNfts(data.result.ownedNfts);
+            } else {
+                setOwnedNfts([]);
+            }
+            setLoadingOwnedNfts(false);
+
+
+
+
+
 
             // fetch transfers again
             /*
@@ -1550,20 +1638,20 @@ function AgentPage(
 
 
                                         <div className="text-xl text-zinc-800 font-bold">
-                                            {nft.metadata?.name}
+                                            {nft.name}
                                         </div>
                                         
                                         <div className="text-4xl text-green-500 font-semibold">
                                             {
                                                 // nft.quantityOwned is bigint
-                                                nft.quantityOwned.toString()
+                                                nft.balance
                                             }개
                                         </div>
 
                                         <div className="w-full flex flex-col gap-2 items-center justify-between">
 
 
-                                                {nft.id.toString() === "0" ? (
+                                                {nft.tokenId === "0" ? (
                                                     <Image
                                                         src="/logo-snowbot300.png"
                                                         alt="NFT"
