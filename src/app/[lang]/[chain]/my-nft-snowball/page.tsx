@@ -1760,7 +1760,7 @@ function AgentPage(
                                                 disabled={transferringNft[index]
                                                     || !toAddress[index]
                                                     || !sendAmount[index]
-                                                    || Number(sendAmount[index]) > Number(nft.quantityOwned.toString())
+                                                    || Number(sendAmount[index]) > Number(nft.balance)
                                                 }
 
 
@@ -1770,7 +1770,7 @@ function AgentPage(
                                                     
                                                     transferNft(
                                                         index,
-                                                        nft.id.toString(),
+                                                        nft.tokenId,
                                                     )
                                                 }
 
