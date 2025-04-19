@@ -1835,7 +1835,7 @@ function IndexPage(
                           onClick={() => {
                               // redirect to nft detail page
                               router.push(
-                                  "/" + params.lang + "/" + params.chain + "/my-nft-snowball/" + erc1155ContractAddress
+                                  "/" + params.lang + "/" + params.chain + "/my-nft-snowball"
                               );
                           }}
                           className="w-full
