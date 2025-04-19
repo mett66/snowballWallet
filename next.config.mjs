@@ -16,6 +16,7 @@ const nextConfig = {
     domains: [
       "cryptologos.cc",
       "vzrcy5vcsuuocnf3.public.blob.vercel-storage.com",
+      "9qpodunbvkfhds59.public.blob.vercel-storage.com",
 
       "fal.media",
       "owinwallet.com",
