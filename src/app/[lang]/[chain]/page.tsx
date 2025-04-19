@@ -250,6 +250,16 @@ function IndexPage(
 
 
 
+
+  const contractErc1155 = getContract({
+    client,
+    chain: params.chain === "arbitrum" ? arbitrum : params.chain === "polygon" ? polygon : params.chain === "ethereum" ? ethereum : polygon,
+    address: erc1155ContractAddress,
+});
+
+
+
+
   const [data, setData] = useState({
     title: "",
     description: "",
@@ -951,39 +961,29 @@ function IndexPage(
     
       const getDctcBalance = async () => {
 
-        if (address) {
-          
-          const contract = getContract({
-            client,
-            chain: polygon,
-            address: contractAddressDCTC,
-          });
+        const balance = await balanceOf({
+          contract: contractDCTC,
+          address: address,
+        });
 
-          if (contract) {
-  
-            const balance = await balanceOf({
-              contract: contract,
-              address: address,
-            });
-
-            setDctcBalance(Number(balance) / 10 ** 18);
-          }
-
-        }
+        setDctcBalance(Number(balance) / 10 ** 18);
 
       };
 
-      address && getDctcBalance();
+      address && contractDCTC && getDctcBalance();
 
       // timer
       
       const interval = setInterval(() => {
-        address && getDctcBalance();
+        address && contractDCTC && getDctcBalance();
       }, 10000);
 
       return () => clearInterval(interval);
 
-  } , [address, contractAddressDCTC]);
+  } , [address]);
+
+  //console.log("address", address);
+  //console.log("contractDCTC", contractDCTC);
 
 
 
@@ -1003,11 +1003,6 @@ function IndexPage(
       const fetchOwnedNFTs = async () => {
 
           setLoadingOwnedNfts(true);
-          const contractErc1155 = getContract({
-              client,
-              chain: polygon,
-              address: erc1155ContractAddress,
-          });
 
           const nfts = await getOwnedNFTs({
               contract: contractErc1155,
@@ -1024,10 +1019,10 @@ function IndexPage(
 
       };
 
-      if (address) {
+      if (address && contractErc1155) {
           fetchOwnedNFTs();
       }
-  }, [address, erc1155ContractAddress]);
+  }, [address]);
 
 
 
