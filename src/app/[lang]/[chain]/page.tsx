@@ -992,38 +992,42 @@ function IndexPage(
 
 
 
-    const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(0);
 
 
 
-    const [ownedNfts, setOwnedNfts] = useState([] as any[]);
-    const [loadingOwnedNfts, setLoadingOwnedNfts] = useState(false);
+  const [ownedNfts, setOwnedNfts] = useState([] as any[]);
+  const [loadingOwnedNfts, setLoadingOwnedNfts] = useState(false);
 
-    useEffect(() => {
-        const fetchOwnedNFTs = async () => {
+  useEffect(() => {
+      const fetchOwnedNFTs = async () => {
 
-            setLoadingOwnedNfts(true);
-            const contractErc1155 = getContract({
-                client,
-                chain: polygon,
-                address: erc1155ContractAddress,
-            });
+          setLoadingOwnedNfts(true);
+          const contractErc1155 = getContract({
+              client,
+              chain: polygon,
+              address: erc1155ContractAddress,
+          });
 
-            const nfts = await getOwnedNFTs({
-                contract: contractErc1155,
-                start: 0,
-                count: 10,
-                address: address as string,
-            });
-            setOwnedNfts(nfts);
-            setLoadingOwnedNfts(false);
+          const nfts = await getOwnedNFTs({
+              contract: contractErc1155,
+              start: 0,
+              count: 10,
+              address: address as string,
+          });
 
-        };
 
-        if (address) {
-            fetchOwnedNFTs();
-        }
-    }, [address, erc1155ContractAddress]);
+          console.log("nfts", nfts);
+
+          setOwnedNfts(nfts);
+          setLoadingOwnedNfts(false);
+
+      };
+
+      if (address) {
+          fetchOwnedNFTs();
+      }
+  }, [address, erc1155ContractAddress]);
 
 
 
