@@ -802,7 +802,7 @@ function IndexPage(
                                 수량
                             </div>
                             <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                {quantity}개
+                                {quantity || 0}개
                             </div>
                           </div>
 
@@ -868,7 +868,7 @@ function IndexPage(
                                 수량
                             </div>
                             <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                {quantity1}개
+                                {quantity1 || 0}개
                             </div>
                           </div>
 

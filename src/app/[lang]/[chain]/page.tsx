@@ -1721,7 +1721,6 @@ function IndexPage(
 
               {ownedNfts.length === 0 && !loadingOwnedNfts && (
                   <div className="w-full flex flex-row gap-2 items-center justify-center
-                      rounded-b-lg
                       bg-white p-5
                   ">
                       <span className="text-lg font-semibold text-zinc-400">
@@ -1731,7 +1730,6 @@ function IndexPage(
               )}
 
 
-              {!loadingOwnedNfts && ownedNfts.length > 0 && (
  
                   <div className="w-full flex flex-col gap-5 items-center justify-between
                       rounded-b-lg
@@ -1739,7 +1737,7 @@ function IndexPage(
                   ">
 
                       {/* nft list */}
-                      {ownedNfts.map((nft, index) => (
+                      {!loadingOwnedNfts && ownedNfts.map((nft, index) => (
 
                           <div key={index} className="w-full flex flex-col gap-2 items-center justify-between
                           bg-white
@@ -1851,9 +1849,6 @@ function IndexPage(
 
 
                   </div>
-
-
-              )}
 
           </div>
 
