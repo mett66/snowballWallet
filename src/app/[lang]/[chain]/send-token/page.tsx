@@ -689,7 +689,8 @@ export default function SendUsdt({ params }: any) {
 
 
 
-          toast.success(USDT_sent_successfully);
+          //toast.success(USDT_sent_successfully);
+          toast.success("전송 완료");
 
           setAmount(0); // reset amount
 
@@ -712,7 +713,7 @@ export default function SendUsdt({ params }: any) {
 
         } else {
 
-          toast.error(Failed_to_send_USDT);
+          toast.error("전송 실패");
 
         }
 
