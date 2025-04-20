@@ -1476,6 +1476,7 @@ function HomeContent() {
                                 <th className="p-2">레퍼럴코드</th>
                                 <th className="p-2">센터장</th>
                                 <th className="p-2">NFT</th>
+                                <th className="p-2">보상내역</th>
                                 
                             </tr>
                         </thead>
@@ -1628,6 +1629,26 @@ function HomeContent() {
                                         }}
                                         className="w-4 h-4"
                                       />
+                                    </td>
+
+                                    {/* /kr/polygon/admin/{user?.walletAddress} */}
+                                    {/* new window open */}
+                                    <td className="p-2 text-center">
+
+
+                                      <Button
+                                        onClick={() => {
+                                          (window as any).Telegram.WebApp.openLink(
+                                            "https://uma.tips/kr/polygon/admin/" + user?.walletAddress
+                                          );
+                                        }}
+                                        className="
+                                          inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
+                                        "
+                                      >
+                                        보상내역
+                                      </Button>
+
                                     </td>
 
                                 </tr>

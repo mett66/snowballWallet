@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
  
 
-    const tokenId = BigInt("0");
+    const tokenId = BigInt("1");
 
 
 
@@ -271,7 +271,7 @@ export async function GET(request: NextRequest) {
           }
 
 
-          
+
 
           let agentWalletAddress = masterWalletAddress;
 
