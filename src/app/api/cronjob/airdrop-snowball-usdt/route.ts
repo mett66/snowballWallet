@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
  
 
-    const tokenId = BigInt("1");
+    const tokenId = BigInt("0");
 
 
 
@@ -183,98 +183,7 @@ export async function GET(request: NextRequest) {
     );
 
 
-    
 
-
-
-    /*
-    const nft = await getNFT({
-      contract: contractErc1155,
-      //tokenId: 0n,
-      //tokenId: BigInt(0),
-
-      tokenId: tokenId,
-    });
-    */
-
-    //console.log("nft", nft);
-    /*
-    nft {
-      metadata: {
-        name: '100 NOAH MINING',
-        description: '',
-        background_color: '',
-        external_url: '',
-        customImage: '',
-        customAnimationUrl: '',
-        animation_url: 'ipfs://QmXa48CAigywF9QMEJvVXX4RGBXAoSiuL7Em7t94rAxVsK/0.mp4',
-        image: 'ipfs://QmXa48CAigywF9QMEJvVXX4RGBXAoSiuL7Em7t94rAxVsK/1.jpeg'
-      },
-      owner: null,
-      id: 0n,
-      tokenURI: 'ipfs://QmVtBg1odf85cyySZfdrirzHG4zo8tshfsCk7zfZYwuuTS/0',
-      type: 'ERC1155',
-      supply: 30n
-    }
-    */
-
-    // total supply of the nft contract
-    /*
-    const totalSupplyResult = await totalSupply({
-      contract: contractErc1155,
-      id: tokenId,
-    });
-
-    console.log("totalSupplyResult", totalSupplyResult.toString());
-
-    */
-
-
-    /*
-    try {
-
-      
-      let pageKey;
-
-      
-      const response = await alchemy.core.getAssetTransfers({
-        fromBlock: '0x0',
-        toBlock: 'latest',
-
-        fromAddress: "0x0000000000000000000000000000000000000000",
-
-        category: [AssetTransfersCategory.ERC1155],
-
-        contractAddresses: [tokenContractAddressErc1155], // Replace with the address of your NFT contract.
-
-        order: SortingOrder.DESCENDING, // Sort the results in descending order.
-        
-        //pageKey: pageKey, // The pageKey is used to paginate through the API call.
-      });
-   
-
-
-      console.log("res", response);
-      // reason: 'missing response',
-      // serverError: TypeError: Referrer "client" is not a valid URL.
-    
-    } catch (error) {
-      console.error("error", error);
-    }
-    */
-
-
-
-    // get holders of the nft contract
-    /*
-    const result = await alchemy.nft.getOwnersForContract(
-      tokenContractAddressErc1155,
-      
-    );
-    */
-
-
-    
 
 
     const result = await alchemy.nft.getOwnersForNft(
@@ -362,211 +271,7 @@ export async function GET(request: NextRequest) {
           }
 
 
-          /*
-          const telegramId = user?.telegramId || "";
-          const center = user?.center || "";
-
-          console.log("telegramId: ", telegramId, "center: ", center);
-
-
-          if (!telegramId || !center) {
-
-            console.log("telegramId or center is empty");
-            ///return NextResponse.error();
-
-            continue;
-          }
-          */
-
-
-
-          // get referrer from telegramId
-          /*
-          {
-            "_id": {
-              "$oid": "677e0dd317d6c41796ada511"
-            },
-            "telegramId": "7779739539",
-            "referralCode": "0x929BEeB406aB304d0ae5A800D07ab2A0694d723b_0"
-          }
-          */
-
-          //const referralCode = await getReferralCodeByTelegramId( telegramId );
-
-
-          /*
-          const referral = await getOneByTelegramId( telegramId, center );
-
           
-          if (!referral) {
-            
-            console.log("referral is empty");
-
-            //return NextResponse.error();
-            continue;
-          }
-
-          const referralCode = referral?.referralCode || "";
-
-          if (!referralCode) {
-
-            console.log("referralCode is empty");
-
-            //return NextResponse.error();
-            continue;
-          }
-
-
-
-
-          const referralContractAddress = referralCode?.split("_")[0] || "";
-          const referralTokenId = BigInt(referralCode?.split("_")[1] || "0");
-
-          console.log("referralContractAddress: ", referralContractAddress, "referralTokenId: ", referralTokenId);
-
-
-
-          // get onwer of nft
-          const response = await alchemy.nft.getOwnersForNft(referralContractAddress, referralTokenId);
-          // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
-
-          const agentWalletAddress = response?.owners[0] || "";
-
-          console.log("agentWalletAddress: ", agentWalletAddress);
-
-          if (!agentWalletAddress) {
-
-            console.log("agentWalletAddress is empty");
-
-            //return NextResponse.error();
-            continue;
-          }
-
-
-
-
-
-
-          // get center owner
-          // if referralCode is "
-          // if rererralCode is "0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_73",
-          // then center owner
-
-
-          let centerWalletAddress = agentWalletAddress;
-
-          let tmpReferralCode = referralCode;
-
-          console.log("tmpReferralCode=======> ", tmpReferralCode);
-
-          // 0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_73
-
-
-          while (tmpReferralCode !== "0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_73") {
-            
-            const referralContractAddress = tmpReferralCode?.split("_")[0] || "";
-            const referralTokenId = BigInt(tmpReferralCode?.split("_")[1] || "0");
-
-            console.log("referralContractAddress: ", referralContractAddress, "referralTokenId: ", referralTokenId);
-
-            const response = await alchemy.nft.getOwnersForNft(referralContractAddress, referralTokenId);
-            // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
-
-            centerWalletAddress = response?.owners[0] || "";
-
-            console.log("centerWalletAddress: ", centerWalletAddress);
-
-            if (!centerWalletAddress) {
-              console.log("centerWalletAddress is empty");
-              break;
-            }
-
-            // telegramId by walletAddress
-
-            const userCenter = await getOneByWalletAddress( centerWalletAddress );
-            if (!userCenter) {
-              console.log("userCenter is empty");
-              break;
-            }
-
-            const telegramId = userCenter?.telegramId || "";
-
-            console.log("telegramId: ", telegramId);
-
-            if (!telegramId) {
-              console.log("telegramId is empty");
-              break;
-            }
-
-            // get referrer from telegramId
-            const referral = await getOneByTelegramId( telegramId, center );
-
-            if (!referral) {
-              console.log("referral is empty");
-              break;
-            }
-
-            tmpReferralCode = referral?.referralCode || "";
-
-            console.log("tmpReferralCode: ", tmpReferralCode);
-
-
-            // if referralCode is same, then break
-            if (referral?.referralCode === tmpReferralCode) {
-              console.log("referralCode is same");
-              break;
-            }
-
-
-          }
-          
-
-          console.log("centerWalletAddress: ", centerWalletAddress);
-          
-          */
-
-          //const platformWalletAddress = "0x75aC3a6364F963e1C72D194f5EfC0e160E9459e0"; // lichard wallet
-
-          /*
-          const adminWalletAddress = "0x2b1CEC9C587E3FCF5d45C5ef1B020D0174446222"; // mett66 
-
-          // get nft from adminWalletAddress
-          const response = await alchemy.nft.getNftsForContract(
-            erc721ContractAddress, {
-            omitMetadata: false, // // Flag to omit metadata
-          });
-
-
-          const start = user.start; // 0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_143
-          const startContractAddress = start?.split("_")[0] || "";
-          const startTokenId = BigInt(start?.split("_")[1] || "0");
-          
-          // owner of the nft
-          const response = await alchemy.nft.getOwnersForNft(startContractAddress, startTokenId);
-          // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
-          const agentWalletAddress = response?.owners[0] || "";
-
-
-          let centerWalletAddress = "";
-
-
-
-          while (agentWalletAddress !== masterWalletAddress) {
-            const response = await alchemy.nft.getOwnersForNft(startContractAddress, startTokenId);
-            // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
-            const owner = response?.owners[0] || "";
-
-            if (!owner) {
-              console.log("owner is empty");
-              break;
-            }
-
-            if (owner === adminWalletAddress) {
-              centerWalletAddress = owner;
-              break;
-            }
-            */
-
 
           let agentWalletAddress = masterWalletAddress;
 
@@ -688,7 +393,7 @@ export async function GET(request: NextRequest) {
           });
           transactions.push(transactionMaster);
 
-          /*
+          
           const transactionAgent = transfer({
             contract: contractUSDT,
             to: agentWalletAddress,
@@ -702,16 +407,6 @@ export async function GET(request: NextRequest) {
             amount: centerAmount,
           });
           transactions.push(transactionCenter);
-          */
-
-          /*
-          const transactionPlatform = transfer({
-            contract: contractUSDT,
-            to: platformWalletAddress,
-            amount: platformAmount,
-          });
-          transactions.push(transactionPlatform);
-          */
 
 
 
@@ -749,7 +444,7 @@ export async function GET(request: NextRequest) {
 
 
 
-          /////const result = await insertReferralRewards(data);
+          const result = await insertReferralRewards(data);
 
           ////console.log("insertReferralRewards result: ", result);
     
@@ -799,7 +494,7 @@ export async function GET(request: NextRequest) {
     
 
 
-          /*
+          
           const batchResponse = await sendBatchTransaction(
             batchOptions
           );
@@ -809,13 +504,12 @@ export async function GET(request: NextRequest) {
           if (!batchResponse) {
             return NextResponse.error();
           }
-          */
+          
 
           return NextResponse.json({
               
               result: {
                   transactions,
-                  //batchResponse,
               },
           });
 
