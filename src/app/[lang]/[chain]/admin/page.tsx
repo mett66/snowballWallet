@@ -1597,7 +1597,7 @@ function HomeContent() {
                                       {
                                         user.walletAddress === "0x2b1CEC9C587E3FCF5d45C5ef1B020D0174446222" ? (
                                           <span className="text-white font-semibold bg-red-500 p-1 rounded">
-                                            어드민
+                                            CEO
                                           </span>
                                         ) : (
 
