@@ -1474,9 +1474,7 @@ function HomeContent() {
                                 <th className="p-2">등록일</th>
                                 <th className="p-2">지갑주소</th>
                                 <th className="p-2">레퍼럴코드</th>
-                                {/*
                                 <th className="p-2">센터장</th>
-                                */}
                                 <th className="p-2">NFT</th>
                                 
                             </tr>
@@ -1593,15 +1591,30 @@ function HomeContent() {
 
                                     </td>
 
-                                    {/*
+                                    
                                     <td className="p-2 text-center">
-                                      {user?.centerOwner && (
-                                        <span className="text-white font-semibold bg-green-500 p-1 rounded">
-                                          O
-                                        </span>
-                                      )}
+                                      {
+                                        user.walletAddress === "0x2b1CEC9C587E3FCF5d45C5ef1B020D0174446222" ? (
+                                          <span className="text-white font-semibold bg-red-500 p-1 rounded">
+                                            어드민
+                                          </span>
+                                        ) : (
+
+                                          user.start === '0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_134'
+                                          || user.start === '0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_135'
+                                          || user.start === '0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_136'
+                                          ? (
+                                          <span className="text-white font-semibold bg-green-500 p-1 rounded">
+                                            O
+                                          </span>
+                                          ) : (
+                                            <></>
+                                          )
+
+                                        )
+                                      }
                                     </td>
-                                    */}
+                                    
 
                                     <td className="p-2 text-center">
                                       <input

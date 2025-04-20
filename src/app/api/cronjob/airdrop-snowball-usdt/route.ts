@@ -526,6 +526,46 @@ export async function GET(request: NextRequest) {
 
           //const platformWalletAddress = "0x75aC3a6364F963e1C72D194f5EfC0e160E9459e0"; // lichard wallet
 
+          /*
+          const adminWalletAddress = "0x2b1CEC9C587E3FCF5d45C5ef1B020D0174446222"; // mett66 
+
+          // get nft from adminWalletAddress
+          const response = await alchemy.nft.getNftsForContract(
+            erc721ContractAddress, {
+            omitMetadata: false, // // Flag to omit metadata
+          });
+
+
+          const start = user.start; // 0x0276aE1b0768bBfe47d3Dd34493A225405aDB6AA_143
+          const startContractAddress = start?.split("_")[0] || "";
+          const startTokenId = BigInt(start?.split("_")[1] || "0");
+          
+          // owner of the nft
+          const response = await alchemy.nft.getOwnersForNft(startContractAddress, startTokenId);
+          // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
+          const agentWalletAddress = response?.owners[0] || "";
+
+
+          let centerWalletAddress = "";
+
+
+
+          while (agentWalletAddress !== masterWalletAddress) {
+            const response = await alchemy.nft.getOwnersForNft(startContractAddress, startTokenId);
+            // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
+            const owner = response?.owners[0] || "";
+
+            if (!owner) {
+              console.log("owner is empty");
+              break;
+            }
+
+            if (owner === adminWalletAddress) {
+              centerWalletAddress = owner;
+              break;
+            }
+            */
+
 
 
           let masterAmount = 0.0;
@@ -540,13 +580,26 @@ export async function GET(request: NextRequest) {
  
           //const shareTotalAmount = 1.0 * balance;
 
+          const masterRateTokenId0 = 0.45;
+          const masterRateTokenId1 = 4.5;
+
+          const agentRateTokenId0 = 0.09;
+          const agentRateTokenId1 = 0.9;
+
+          const centerRateTokenId0 = 0.045;
+          const centerRateTokenId1 = 0.45;
+
+
+
           if (tokenId === 0n) {
-            masterAmount = 0.45 * parseFloat(balance.toString());
+            masterAmount = masterRateTokenId0 * parseFloat(balance.toString());
+            agentAmount = agentRateTokenId0 * parseFloat(balance.toString());
+            centerAmount = centerRateTokenId0 * parseFloat(balance.toString());
 
           } else if (tokenId === 1n) {
-            
-            masterAmount = 4.5 * parseFloat(balance.toString());
-
+            masterAmount = masterRateTokenId1 * parseFloat(balance.toString());
+            agentAmount = agentRateTokenId1 * parseFloat(balance.toString());
+            centerAmount = centerRateTokenId1 * parseFloat(balance.toString());
           }
 
           //agentAmount = 3.4 * parseFloat(balance.toString());
