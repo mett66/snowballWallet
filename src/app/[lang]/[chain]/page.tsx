@@ -159,7 +159,7 @@ const contractAddressEthereum = "0xdac17f958d2ee523a2206206994597c13d831ec7"; //
 const contractAddressDCTC = "0x76856Fd779AcE7C64297F9F662D3303e09dB269f"; // DCTC on Polygon
 
 
-//const erc1155ContractAddress = "0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6";
+const erc1155ContractAddress = "0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6";
 
 
 
@@ -1835,7 +1835,7 @@ function IndexPage(
                           onClick={() => {
                               // redirect to nft detail page
                               router.push(
-                                  "/" + params.lang + "/" + params.chain + "/my-nft-snowball"
+                                  "/" + params.lang + "/" + params.chain + "/my-nft-snowball/" + erc1155ContractAddress + "?start=" + start
                               );
                           }}
                           className="w-full

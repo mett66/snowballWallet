@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
  
 
-    const tokenId = BigInt("0");
+    const tokenId = BigInt("1");
 
 
 
@@ -542,8 +542,11 @@ export async function GET(request: NextRequest) {
 
           if (tokenId === 0n) {
             masterAmount = 0.45 * parseFloat(balance.toString());
+
           } else if (tokenId === 1n) {
+            
             masterAmount = 4.5 * parseFloat(balance.toString());
+
           }
 
           //agentAmount = 3.4 * parseFloat(balance.toString());
@@ -649,79 +652,78 @@ export async function GET(request: NextRequest) {
 
 
 
-
+      if (transactions.length > 0) {
       
-      try {
+        try {
+
+          
+          const batchOptions: SendBatchTransactionOptions = {
+            account: account,
+            transactions: transactions,
+          };
+          
+
+
+          /*
+          let transactionsAAA = [] as any;
+
+          const transactionCenter = transfer({
+            contract: contractUSDT,
+            to: "0x542197103Ca1398db86026Be0a85bc8DcE83e440",
+            amount: 90
+          });
+          transactionsAAA.push(transactionCenter);
+
+          const batchOptions: SendBatchTransactionOptions = {
+            account: account,
+            transactions: transactionsAAA,
+          };
+          */
+    
+
+
+          
+          const batchResponse = await sendBatchTransaction(
+            batchOptions
+          );
+      
+          console.log("batchResponse: ", batchResponse);
+      
+          if (!batchResponse) {
+            return NextResponse.error();
+          }
+
+          return NextResponse.json({
+              
+              result: {
+                  transactions,
+                  batchResponse,
+              },
+          });
 
         
-        const batchOptions: SendBatchTransactionOptions = {
-          account: account,
-          transactions: transactions,
-        };
-        
 
 
-        /*
-        let transactionsAAA = [] as any;
-
-        const transactionCenter = transfer({
-          contract: contractUSDT,
-          to: "0x542197103Ca1398db86026Be0a85bc8DcE83e440",
-          amount: 90
-        });
-        transactionsAAA.push(transactionCenter);
-
-        const batchOptions: SendBatchTransactionOptions = {
-          account: account,
-          transactions: transactionsAAA,
-        };
-        */
-  
 
 
-        /*
-        const batchResponse = await sendBatchTransaction(
-          batchOptions
-        );
-    
-        console.log("batchResponse: ", batchResponse);
-    
-        if (!batchResponse) {
-          return NextResponse.error();
+
+
+        } catch (error) {
+          console.error("error", error);
+          return NextResponse.json({
+              
+              result: {
+                  transactions,
+                  error,
+              },
+          });
+
         }
 
-        return NextResponse.json({
-            
-            result: {
-                transactions,
-                batchResponse,
-            },
-        });
-
-        */
-
-        return NextResponse.json({
-          result: {
-            transactions,
-            batchOptions,
-          },
-        });
-
-
-
-
-
-      } catch (error) {
-        console.error("error", error);
-        return NextResponse.json({
-            
-            result: {
-                transactions,
-                error,
-            },
-        });
-
       }
+
+
+
       
 
 
