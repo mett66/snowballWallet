@@ -621,7 +621,7 @@ function IndexPage(
               "Content-Type": "application/json",
           },
           body: JSON.stringify({
-              limit: 10,
+              limit: 100,
               page: 1,
               walletAddress: address,
               contractAddress: agentContractAddress,
@@ -639,7 +639,8 @@ function IndexPage(
 
       const data = await response.json();
 
-      //console.log("data", data);
+      //console.log("result", data.result);
+
 
       if (data.result) {
           setRewardHistory(data.result);
@@ -668,7 +669,7 @@ function IndexPage(
               "Content-Type": "application/json",
           },
           body: JSON.stringify({
-              limit: 10,
+              limit: 100,
               page: 1,
               walletAddress: address,
               contractAddress: agentContractAddress,
@@ -706,7 +707,7 @@ function IndexPage(
               "Content-Type": "application/json",
           },
           body: JSON.stringify({
-              limit: 10,
+              limit: 100,
               page: 1,
               walletAddress: address,
               contractAddress: agentContractAddress,
@@ -992,9 +993,14 @@ function IndexPage(
                   {/* table */}
                   <div className='w-full flex flex-col gap-2'>
                       <div className='w-full flex flex-row items-center justify-between gap-2'>
-                          <div className="text-sm text-zinc-800 font-bold">
+                          <div className="flex flex-row items-center gap-2">
+                            {/* dot */}
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-zinc-800 font-bold">
                               보상 내역
+                            </span>
                           </div>
+
                           <button
                             onClick={() => {
                                 getRewardHistory();
@@ -1097,7 +1103,7 @@ function IndexPage(
                       <div className='w-full flex flex-row items-center justify-between gap-2'>
                           <div className="flex flex-row items-center gap-2">
                             {/* dot */}
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                             <span className="text-sm text-zinc-800 font-bold">
                               에이전트 보상 내역
                             </span>
@@ -1141,12 +1147,6 @@ function IndexPage(
                                     날짜
                                   </th>
                                   <th className="px-2 py-2 text-sm text-zinc-800">
-                                    계약번호
-                                  </th>
-                                  <th className="px-2 py-2 text-sm text-zinc-800">
-                                    수량
-                                  </th>
-                                  <th className="px-2 py-2 text-sm text-zinc-800">
                                     보상(USDT)
                                   </th>
                                 </tr>
@@ -1160,14 +1160,6 @@ function IndexPage(
                                         month: "2-digit",
                                         day: "2-digit",
                                       })}
-                                    </td>
-
-                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-center">
-                                      #{item.tokenId}
-                                    </td>
-
-                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
-                                      {item.balance}
                                     </td>
                                     <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
                                       {item.amount}
@@ -1246,15 +1238,6 @@ function IndexPage(
                                     날짜
                                   </th>
                                   <th className="px-2 py-2 text-sm text-zinc-800">
-                                    계약번호
-                                  </th>
-                                  <th className="px-2 py-2 text-sm text-zinc-800">
-                                    수량
-                                  </th>
-                                  <th className="px-2 py-2 text-sm text-zinc-800">
-                                    보상(US
-                                  </th>
-                                  <th className="px-2 py-2 text-sm text-zinc-800">
                                     보상(USDT)
                                   </th>
                                 </tr>
@@ -1268,14 +1251,6 @@ function IndexPage(
                                         month: "2-digit",
                                         day: "2-digit",
                                       })}
-                                    </td>
-
-                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-center">
-                                      #{item.tokenId}
-                                    </td>
-
-                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
-                                      {item.balance}
                                     </td>
                                     <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
                                       {item.amount}

@@ -177,7 +177,7 @@ export async function getRewards(
   //tokenId: number,
 ) {
 
-  //console.log("getRewards", limit, page, walletAddress, contractAddress, tokenId);
+  //console.log("getRewards", limit, page, walletAddress, contractAddress);
 
   const client = await clientPromise;
   const collection = client.db('vienna').collection('referral_rewards');
@@ -192,6 +192,9 @@ export async function getRewards(
   ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
   
 
+  //console.log("getRewards", rewards);
+
+
   return rewards;
 }
 
@@ -202,10 +205,11 @@ export async function getAgentRewards(
   page: number,
   walletAddress: string,
   contractAddress: string,
-  //tokenId: number,
 ) {
 
-  //console.log("getAgentRewards", limit, page, walletAddress, contractAddress, tokenId);
+  console.log("getAgentRewards", limit, page, walletAddress, contractAddress);
+
+
 
   const client = await clientPromise;
   const collection = client.db('vienna').collection('referral_rewards');
@@ -214,10 +218,20 @@ export async function getAgentRewards(
   const rewards = await collection.find(
     {
       walletAddress: walletAddress,
-      contractAddress: contractAddress,
+
+
+      //contractAddress: contractAddress,
+      
       category: "agent",
+
     }
   ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
+
+
+
+  console.log("getAgentRewards", rewards);
+
+
   
 
   return rewards;
@@ -243,7 +257,9 @@ export async function getCenterRewards(
   const rewards = await collection.find(
     {
       walletAddress: walletAddress,
-      contractAddress: contractAddress,
+      
+      //contractAddress: contractAddress,
+
       category: "center",
     }
   ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
