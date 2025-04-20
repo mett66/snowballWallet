@@ -1638,7 +1638,10 @@ function HomeContent() {
 
                                       <Button
                                         onClick={() => {
-                                          (window as any).Telegram.WebApp.openLink(
+                                          //(window as any).Telegram.WebApp.openLink(
+                                            "https://uma.tips/kr/polygon/admin/" + user?.walletAddress
+                                          //);
+                                          window.open(
                                             "https://uma.tips/kr/polygon/admin/" + user?.walletAddress
                                           );
                                         }}
