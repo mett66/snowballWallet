@@ -656,6 +656,84 @@ function IndexPage(
   } , [address]);
 
 
+
+  // agent reward history
+  const [agentRewardHistory, setAgentRewardHistory] = useState([] as any[]);
+  const [loadingAgentRewardHistory, setLoadingAgentRewardHistory] = useState(false);
+  const getAgentRewardHistory = async () => {
+      setLoadingAgentRewardHistory(true);
+      const response = await fetch("/api/affiliation/getAgentRewardsByWalletAddress", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              limit: 10,
+              page: 1,
+              walletAddress: address,
+              contractAddress: agentContractAddress,
+              //tokenId: parseInt(agentTokenId),
+          }),
+      });
+      if (!response.ok) {
+          console.error("Error fetching agent reward history");
+          setLoadingAgentRewardHistory(false);
+          return;
+      }
+      const data = await response.json();
+      //console.log("data", data);
+      if (data.result) {
+          setAgentRewardHistory(data.result);
+      } else {
+          setAgentRewardHistory([]);
+      }
+      setLoadingAgentRewardHistory(false);
+  }
+  useEffect(() => {
+      address && getAgentRewardHistory();
+  } , [address]);
+
+
+
+  // center reward history
+  const [centerRewardHistory, setCenterRewardHistory] = useState([] as any[]);
+  const [loadingCenterRewardHistory, setLoadingCenterRewardHistory] = useState(false);
+  const getCenterRewardHistory = async () => {
+      setLoadingCenterRewardHistory(true);
+      const response = await fetch("/api/affiliation/getCenterRewardsByWalletAddress", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              limit: 10,
+              page: 1,
+              walletAddress: address,
+              contractAddress: agentContractAddress,
+              //tokenId: parseInt(agentTokenId),
+          }),
+      });
+      if (!response.ok) {
+          console.error("Error fetching center reward history");
+          setLoadingCenterRewardHistory(false);
+          return;
+      }
+      const data = await response.json();
+      //console.log("data", data);
+      if (data.result) {
+          setCenterRewardHistory(data.result);
+      } else {
+          setCenterRewardHistory([]);
+      }
+      setLoadingCenterRewardHistory(false);
+  }
+
+  useEffect(() => {
+      address && getCenterRewardHistory();
+  } , [address]);
+
+
+
   /*
   {
     "_id": "67f4ccd6e32ede5e968242ac",
@@ -668,6 +746,11 @@ function IndexPage(
     "createdAt": "2025-04-08T07:14:30.560Z"
   }
     */
+
+
+
+
+  
 
 
 
@@ -805,7 +888,7 @@ function IndexPage(
                                 수량
                             </div>
                             <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                {quantity}개
+                                {quantity || 0}개
                             </div>
                           </div>
 
@@ -871,7 +954,7 @@ function IndexPage(
                                 수량
                             </div>
                             <div className="w-full text-sm text-zinc-800 font-bold text-right">
-                                {quantity1}개
+                                {quantity1 || 0}개
                             </div>
                           </div>
 
@@ -898,6 +981,8 @@ function IndexPage(
                   </div>
 
 
+
+                </div>
 
 
 
@@ -988,53 +1073,6 @@ function IndexPage(
                               </tbody>
                             </table>
 
-
-
-
-
-
-                            {/* header */}
-                            {/*
-                            <div className='w-full flex flex-row items-center justify-between gap-2 p-2 bg-gray-200 rounded-lg'>
-                              <div className="text-sm text-zinc-800 font-bold">
-                                날짜
-                              </div>
-                              <div className="text-sm text-zinc-800 font-bold">
-                                계약번호
-                              </div>
-                              <div className="text-sm text-zinc-800 font-bold">
-                                수량
-                              </div>
-                              <div className="text-sm text-zinc-800 font-bold">
-                                보상(USDT)
-                              </div>
-                            </div>
-
-                            {rewardHistory.map((item, index) => (
-                              <div key={index} className='w-full flex flex-row items-center justify-between gap-2 p-2 bg-gray-200 rounded-lg'>
-                                <div className="text-sm text-zinc-800 font-bold">
-                                  {new Date(item.createdAt).toLocaleDateString("ko-KR", {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                  })}
-                                </div>
-
-                                <div className="text-sm text-zinc-800 font-bold">
-                                  #{item.tokenId}
-                                </div>
-
-                                <div className="text-sm text-zinc-800 font-bold">
-                                  {item.balance}
-                                </div>
-
-                                <div className="text-sm text-zinc-800 font-bold">
-                                  {item.amount}
-                                </div>
-                              </div>
-                            ))}
-                            */}
-
                           </div>
                         )}
 
@@ -1053,9 +1091,234 @@ function IndexPage(
 
 
 
+                  {/* agent reward history */}
+                  {/* table */}
+                  <div className='mt-5 w-full flex flex-col gap-2'>
+                      <div className='w-full flex flex-row items-center justify-between gap-2'>
+                          <div className="flex flex-row items-center gap-2">
+                            {/* dot */}
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-zinc-800 font-bold">
+                              에이전트 보상 내역
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => {
+                                getAgentRewardHistory();
+                            }}
+                            className="p-2 rounded bg-gray-200 text-sm text-zinc-800 font-bold hover:bg-gray-300 transition duration-200"
+                          >
+                            새로고침
+                          </button>
+                        </div>
+                      <div className='w-full flex flex-col gap-2'>
+                        {loadingAgentRewardHistory && (
+                          <div className='w-full flex flex-row items-center justify-center'>
+                            <Image
+                              src="/loading.png"
+                              alt="Loading"
+                              width={50}
+                              height={50}
+                              className="rounded-lg animate-spin"
+                            />
+                          </div>
+                        )}
+                        {!loadingAgentRewardHistory && agentRewardHistory.length === 0 && (
+                          <div className='w-full flex flex-row items-center justify-center'>
+                            <div className="text-sm text-zinc-800 font-bold">
+                              에이전트 보상 내역이 없습니다.
+                            </div>
+                          </div>
+                        )}
+                        {!loadingAgentRewardHistory && agentRewardHistory.length > 0 && (
+                          <div className='w-full flex flex-col gap-2'>
+
+                            <table className="w-full
+                              table-auto border-collapse border border-gray-300 rounded-lg">
+                              <thead>
+                                <tr className="bg-gray-200">
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    날짜
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    계약번호
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    수량
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    보상(USDT)
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {agentRewardHistory.map((item, index) => (
+                                  <tr key={index} className="bg-gray-100 hover:bg-gray-200">
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-left">
+                                      {new Date(item.createdAt).toLocaleDateString("ko-KR", {
+                                        //year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                      })}
+                                    </td>
+
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-center">
+                                      #{item.tokenId}
+                                    </td>
+
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
+                                      {item.balance}
+                                    </td>
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
+                                      {item.amount}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+
+                          </div>
+                        )}
+
+                      </div>
+
+                      <div className='w-full flex flex-row items-center justify-between gap-2'>
+                          <div className="text-sm text-zinc-800 font-bold">
+                              총 보상
+                          </div>
+                          <div className="text-sm text-zinc-800 font-bold">
+                            {agentRewardHistory.reduce((acc, item) => acc + item.amount, 0).toFixed(2)} USDT
+                          </div>
+                      </div>
+
+                  </div>
 
 
-                </div>
+
+                  {/* center reward history */}
+                  {/* table */}
+
+                  <div className='mt-5 w-full flex flex-col gap-2'>
+                      <div className='w-full flex flex-row items-center justify-between gap-2'>
+                          <div className="flex flex-row items-center gap-2">
+                            {/* dot */}
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span className="text-sm text-zinc-800 font-bold">
+                              센터 보상 내역
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => {
+                                getCenterRewardHistory();
+                            }}
+                            className="p-2 rounded bg-gray-200 text-sm text-zinc-800 font-bold hover:bg-gray-300 transition duration-200"
+                          >
+                            새로고침
+                          </button>
+                        </div>
+                      <div className='w-full flex flex-col gap-2'>
+                        {loadingCenterRewardHistory && (
+                          <div className='w-full flex flex-row items-center justify-center'>
+                            <Image
+                              src="/loading.png"
+                              alt="Loading"
+                              width={50}
+                              height={50}
+                              className="rounded-lg animate-spin"
+                            />
+                          </div>
+                        )}
+                        {!loadingCenterRewardHistory && centerRewardHistory.length === 0 && (
+                          <div className='w-full flex flex-row items-center justify-center'>
+                            <div className="text-sm text-zinc-800 font-bold">
+                              센터 보상 내역이 없습니다.
+                            </div>
+                          </div>
+                        )}
+                        {!loadingCenterRewardHistory && centerRewardHistory.length > 0 && (
+                          <div className='w-full flex flex-col gap-2'>
+
+                            <table className="w-full
+                              table-auto border-collapse border border-gray-300 rounded-lg">
+                              <thead>
+                                <tr className="bg-gray-200">
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    날짜
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    계약번호
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    수량
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    보상(US
+                                  </th>
+                                  <th className="px-2 py-2 text-sm text-zinc-800">
+                                    보상(USDT)
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {centerRewardHistory.map((item, index) => (
+                                  <tr key={index} className="bg-gray-100 hover:bg-gray-200">
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-left">
+                                      {new Date(item.createdAt).toLocaleDateString("ko-KR", {
+                                        //year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                      })}
+                                    </td>
+
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-center">
+                                      #{item.tokenId}
+                                    </td>
+
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
+                                      {item.balance}
+                                    </td>
+                                    <td className="px-2 py-2 text-sm text-zinc-800 font-semibold text-right">
+                                      {item.amount}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+
+                          </div>
+
+                        )}
+
+                      </div>
+
+                      <div className='w-full flex flex-row items-center justify-between gap-2'>
+                          <div className="text-sm text-zinc-800 font-bold">
+                              총 보상
+                          </div>
+                          <div className="text-sm text-zinc-800 font-bold">
+                            {centerRewardHistory.reduce((acc, item) => acc + item.amount, 0).toFixed(2)} USDT
+                          </div>
+                      </div>
+
+                    </div>
+ 
+
+
+                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

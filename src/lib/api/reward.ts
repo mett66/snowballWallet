@@ -187,10 +187,68 @@ export async function getRewards(
     {
       walletAddress: walletAddress,
       contractAddress: contractAddress,
-      //tokenId: tokenId,
+      category: "master",
     }
   ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
   
 
   return rewards;
 }
+
+
+// getAgentRewards
+export async function getAgentRewards(
+  limit: number,
+  page: number,
+  walletAddress: string,
+  contractAddress: string,
+  //tokenId: number,
+) {
+
+  //console.log("getAgentRewards", limit, page, walletAddress, contractAddress, tokenId);
+
+  const client = await clientPromise;
+  const collection = client.db('vienna').collection('referral_rewards');
+
+  // get all rewards for walletAddress, contractAddress, tokenId
+  const rewards = await collection.find(
+    {
+      walletAddress: walletAddress,
+      contractAddress: contractAddress,
+      category: "agent",
+    }
+  ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
+  
+
+  return rewards;
+}
+
+
+
+// getCenterRewards
+export async function getCenterRewards(
+  limit: number,
+  page: number,
+  walletAddress: string,
+  contractAddress: string,
+  //tokenId: number,
+) {
+
+  //console.log("getCenterRewards", limit, page, walletAddress, contractAddress, tokenId);
+
+  const client = await clientPromise;
+  const collection = client.db('vienna').collection('referral_rewards');
+
+  // get all rewards for walletAddress, contractAddress, tokenId
+  const rewards = await collection.find(
+    {
+      walletAddress: walletAddress,
+      contractAddress: contractAddress,
+      category: "center",
+    }
+  ).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).toArray();
+  
+
+  return rewards;
+}
+
