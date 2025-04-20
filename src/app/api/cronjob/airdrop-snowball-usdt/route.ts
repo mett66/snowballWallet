@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
 
  
 
-    const tokenId = BigInt("1");
+    const tokenId = BigInt("0");
 
 
 
@@ -240,7 +240,7 @@ export async function GET(request: NextRequest) {
 
         const balance = parseFloat(balanceResult.toString());
 
-        console.log("owner: ", owner, "balance: ", balance);
+        ///console.log("owner: ", owner, "balance: ", balance);
 
 
         /*
@@ -301,16 +301,23 @@ export async function GET(request: NextRequest) {
           let referralContractAddress = "";
           let referralTokenId = 0n;
 
+   
+          let userOwner = user;
+
           let userStart = user.start;
 
+
           while (true) {
+
+            ///console.log("userStart: ", userStart);
+
 
             referralContractAddress = userStart?.split("_")[0] || "";
             referralTokenId = BigInt(userStart?.split("_")[1] || "0");
 
             if (referralTokenId === 134n || referralTokenId === 135n || referralTokenId === 136n) {
               //console.log("referralTokenId is 134, 135, 136");
-              centerWalletAddress = user.walletAddress;
+              centerWalletAddress = userOwner.walletAddress;
               break;
             }
 
@@ -325,14 +332,18 @@ export async function GET(request: NextRequest) {
             }
 
 
-            const userOwner = await getOneByWalletAddress( ownerWalletAddress );
+            const UserResponse = await getOneByWalletAddress( ownerWalletAddress );
 
-            if (!userOwner) {
+            if (!UserResponse) {
               console.log("userOwner is empty");
               break;
             }
 
+            userOwner = UserResponse;
+
             userStart = userOwner.start;
+
+
 
           }
           
@@ -494,7 +505,7 @@ export async function GET(request: NextRequest) {
     
 
 
-          
+          /*
           const batchResponse = await sendBatchTransaction(
             batchOptions
           );
@@ -504,6 +515,7 @@ export async function GET(request: NextRequest) {
           if (!batchResponse) {
             return NextResponse.error();
           }
+          */
           
 
           return NextResponse.json({

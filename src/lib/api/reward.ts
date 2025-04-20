@@ -60,9 +60,14 @@ export async function insertReferralRewards(data: any) {
 
   console.log("checkDate", checkDate);
 
+
+  // for test
+  // comment
+  
   if (checkDate) {
     return null;
   }
+  
 
 
 

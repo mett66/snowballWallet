@@ -85,7 +85,7 @@ import {
   } from "thirdweb/wallets";
 
 
-import { client } from "../../../../client";
+import { client } from "../../../client";
 import { add } from 'thirdweb/extensions/farcaster/keyGateway';
 import { token } from "thirdweb/extensions/vote";
 import { parse } from "path";
@@ -134,7 +134,6 @@ function IndexPage(
         params: {
             lang: string;
             chain: string;
-            walletAddress: string;
         };
     }
 ) {
@@ -143,11 +142,11 @@ function IndexPage(
   console.log("params", params);
 
 
-  const { lang, chain, walletAddress} = params;
+  const { lang, chain} = params;
 
   const searchParams = useSearchParams();
 
-  console.log("walletAddress", walletAddress);
+
 
 
 
@@ -156,10 +155,12 @@ function IndexPage(
 
 
 
-  const address = walletAddress;
+
 
 
   const activeAccount = useActiveAccount();
+
+  const address = activeAccount?.address;
 
   
   const contract = getContract({
@@ -313,7 +314,7 @@ function IndexPage(
 
         const data = await response.json();
 
-        //console.log("getUser data", data);
+        console.log("getUser data", data);
 
 
 
@@ -680,9 +681,20 @@ function IndexPage(
 
       {/* go back button */}
       <div className="p-4 w-full flex justify-start items-center gap-2">
+          <button
+              onClick={() => router.back()}
+              className="flex items-center justify-center bg-gray-200 rounded-full p-2">
+              <Image
+                  src="/icon-back.png"
+                  alt="Back"
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+              />
+          </button>
           {/* title */}
-          <span className="text-xl text-gray-500 font-semibold">
-              {nickname} SNOWBOT 자산 및 보상 내역
+          <span className="text-sm text-gray-500 font-semibold">
+              나의 NFT 자산
           </span>
       </div>
 
