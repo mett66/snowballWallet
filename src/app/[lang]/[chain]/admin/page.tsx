@@ -1730,7 +1730,7 @@ function HomeContent() {
                                       <Button
                                         onClick={() => {
                                           navigator.clipboard.writeText(
-                                            "https://t.me/" + selectCenter + "/?start=" + nft.contract.address + "_" + nft.tokenId
+                                            "https://uma.tips/" + "?start=" + nft.contract.address + "_" + nft.tokenId
                                           );
                                           alert(`레퍼럴 링크 복사되었습니다.`);
                                         }}

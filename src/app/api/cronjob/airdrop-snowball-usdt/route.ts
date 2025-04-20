@@ -167,9 +167,6 @@ export async function GET(request: NextRequest) {
 
 
 
-
-
-
     const tokenContractAddressErc1155 = '0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6';
 
 
@@ -275,6 +272,10 @@ export async function GET(request: NextRequest) {
       
     );
     */
+
+
+    
+
 
     const result = await alchemy.nft.getOwnersForNft(
       tokenContractAddressErc1155,
@@ -567,6 +568,70 @@ export async function GET(request: NextRequest) {
             */
 
 
+          let agentWalletAddress = masterWalletAddress;
+
+          // get nft from agentWalletAddress
+          const response = await alchemy.nft.getOwnersForNft(
+            user.start?.split("_")[0] || "",
+            BigInt(user.start?.split("_")[1] || "0")
+          );
+
+
+          // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
+          if (response?.owners.length > 0) {
+            agentWalletAddress = response?.owners[0];
+          }
+
+
+
+
+
+
+
+
+          // if user's referral tokenId is 134, 135, 136, then user address is centerWalletAddress
+
+          let centerWalletAddress = masterWalletAddress;
+
+          let referralContractAddress = "";
+          let referralTokenId = 0n;
+
+          let userStart = user.start;
+
+          while (true) {
+
+            referralContractAddress = userStart?.split("_")[0] || "";
+            referralTokenId = BigInt(userStart?.split("_")[1] || "0");
+
+            if (referralTokenId === 134n || referralTokenId === 135n || referralTokenId === 136n) {
+              //console.log("referralTokenId is 134, 135, 136");
+              centerWalletAddress = user.walletAddress;
+              break;
+            }
+
+
+            const response = await alchemy.nft.getOwnersForNft(referralContractAddress, referralTokenId);
+            // { owners: [ '0xf5fff32cf83a1a614e15f25ce55b0c0a6b5f8f2c' ] }
+            const ownerWalletAddress = response?.owners[0];
+
+            if (!ownerWalletAddress) {
+              console.log("ownerWalletAddress is empty");
+              break;
+            }
+
+
+            const userOwner = await getOneByWalletAddress( ownerWalletAddress );
+
+            if (!userOwner) {
+              console.log("userOwner is empty");
+              break;
+            }
+
+            userStart = userOwner.start;
+
+          }
+          
+
 
           let masterAmount = 0.0;
 
@@ -611,9 +676,8 @@ export async function GET(request: NextRequest) {
 
 
           console.log("masterWalletAddress: ", masterWalletAddress, "masterAmount: ", masterAmount);
-          
-          //console.log("agentWalletAddress: ", agentWalletAddress, "agentAmount: ", agentAmount);
-          //console.log("centerWalletAddress: ", centerWalletAddress, "centerAmount: ", centerAmount);
+          console.log("agentWalletAddress: ", agentWalletAddress, "agentAmount: ", agentAmount);
+          console.log("centerWalletAddress: ", centerWalletAddress, "centerAmount: ", centerAmount);
           
           //console.log("platformWalletAddress: ", platformWalletAddress, "platformAmount: ", platformAmount);
 
@@ -665,8 +729,8 @@ export async function GET(request: NextRequest) {
 
             masterWalletAddress: masterWalletAddress,
 
-            agentWalletAddress: masterWalletAddress,
-            centerWalletAddress: masterWalletAddress,
+            agentWalletAddress: agentWalletAddress,
+            centerWalletAddress: centerWalletAddress,
 
             //agentWalletAddress: agentWalletAddress,
             //centerWalletAddress: centerWalletAddress,
@@ -685,9 +749,9 @@ export async function GET(request: NextRequest) {
 
 
 
-          const result = await insertReferralRewards(data);
+          /////const result = await insertReferralRewards(data);
 
-          console.log("insertReferralRewards result: ", result);
+          ////console.log("insertReferralRewards result: ", result);
     
 
 
@@ -735,7 +799,7 @@ export async function GET(request: NextRequest) {
     
 
 
-          
+          /*
           const batchResponse = await sendBatchTransaction(
             batchOptions
           );
@@ -745,12 +809,13 @@ export async function GET(request: NextRequest) {
           if (!batchResponse) {
             return NextResponse.error();
           }
+          */
 
           return NextResponse.json({
               
               result: {
                   transactions,
-                  batchResponse,
+                  //batchResponse,
               },
           });
 
