@@ -714,17 +714,18 @@ function AgentPage(
         // check nickname length and alphanumeric
         //if (nickname.length < 5 || nickname.length > 10) {
 
-        if (editedNickname.length < 5 || editedNickname.length > 10) {
+        if (editedNickname.length < 3 || editedNickname.length > 10) {
 
-            toast.error(Nickname_should_be_5_10_characters);
+            toast.error("이름은 3자 이상 10자 이하로 입력해주세요");
             return;
         }
         
-        ///if (!/^[a-z0-9]*$/.test(nickname)) {
+        /*
         if (!/^[a-z0-9]*$/.test(editedNickname)) {
             toast.error(Nickname_should_be_alphanumeric_lowercase);
             return;
         }
+        */
 
 
         setLoadingSetUserData(true);
@@ -758,11 +759,13 @@ function AgentPage(
                 setNicknameEdit(false);
                 setEditedNickname('');
 
-                toast.success('Nickname saved');
+                //toast.success('Nickname saved');
+                toast.success('이름이 저장되었습니다');
 
             } else {
 
-                toast.error('You must enter different nickname');
+                //toast.error('You must enter different nickname');
+                toast.error('이름을 변경해주세요');
             }
 
 
@@ -797,10 +800,15 @@ function AgentPage(
                 setNicknameEdit(false);
                 setEditedNickname('');
 
-                toast.success('Nickname saved');
+                //toast.success('Nickname saved');
+                toast.success('이름이 저장되었습니다');
+
+
 
             } else {
-                toast.error('Error saving nickname');
+                //toast.error('Error saving nickname');
+                toast.error('오류가 발생했습니다. 다시 시도해주세요');
+
             }
         }
 
@@ -1011,7 +1019,7 @@ function AgentPage(
 
         if (!userCode) {
             //console.log("userCode=====", userCode);
-            toast.error('아이디을 먼저 설정해주세요');
+            toast.error('이름을 먼저 설정해주세요');
             return;
         }
 
@@ -1656,7 +1664,7 @@ function AgentPage(
                                     {/* dot */}
                                     <div className='w-2 h-2 bg-green-500 rounded-full' />
                                     <span className='text-sm font-semibold text-blue-500'>
-                                        {My_Nickname}
+                                        내 이름
                                     </span>
                                 </div>
 
@@ -1700,8 +1708,8 @@ function AgentPage(
                                     {/* dot */}
                                     <div className='w-2 h-2 bg-green-500 rounded-full' />
                                     <span className='text-sm font-semibold text-blue-500'>
-                                        {!userCode ? Enter_your_nickname :
-                                            nicknameEdit ? "수정할 내 아이디" : Enter_your_nickname
+                                        {!userCode ? "이름을 입력하세요" :
+                                            nicknameEdit ? "수정할 내 이름" : "이름을 입력하세요"
                                         }
                                     </span>
                                 </div>
@@ -1710,24 +1718,40 @@ function AgentPage(
                                     <input
                                         disabled={!address}
                                         className="p-2 w-64 text-zinc-100 bg-zinc-800 rounded text-2xl font-semibold"
-                                        placeholder={Enter_your_nickname}
+                                        placeholder="이름을 입력하세요"
                                         
                                         //value={nickname}
                                         value={editedNickname}
 
                                         type='text'
                                         onChange={(e) => {
-                                            // check if the value is a number
-                                            // check if the value is alphanumeric and lowercase
+                                            // check if the nickname is korean characters
 
+                                            
+
+
+                                            // check if 3~10 characters
+
+                                            if (e.target.value.length > 10) {
+                                                toast.error("이름은 10자 이하로 입력해주세요");
+                                                return;
+                                            }
+
+
+
+                                            /*
                                             if (!/^[a-z0-9]*$/.test(e.target.value)) {
                                                 toast.error(Nickname_should_be_alphanumeric_lowercase);
                                                 return;
                                             }
+
+
+
                                             if ( e.target.value.length > 10) {
                                                 toast.error(Nickname_should_be_at_least_5_characters_and_at_most_10_characters);
                                                 return;
                                             }
+                                            */
 
                                             //setNickname(e.target.value);
 
@@ -1741,18 +1765,18 @@ function AgentPage(
                                     {editedNickname && isNicknameDuplicate && (
                                         <div className='flex flex-row gap-2 items-center justify-between'>
                                             <span className='text-xs font-semibold text-red-500'>
-                                                이미 사용중인 아이디입니다.
+                                                이미 사용중인 이름입니다.
                                             </span>
                                         </div>
                                     )}
 
                                     {editedNickname
                                     && !isNicknameDuplicate
-                                    && editedNickname.length >= 5
+                                    && editedNickname.length >= 3
                                     && (
                                         <div className='flex flex-row gap-2 items-center justify-between'>
                                             <span className='text-xs font-semibold text-green-500'>
-                                                사용가능한 아이디입니다.
+                                                사용가능한 이름입니다.
                                             </span>
                                         </div>
                                     )}
@@ -1761,21 +1785,21 @@ function AgentPage(
 
                                 <div className='flex flex-row gap-2 items-center justify-between'>
                                     <span className='text-xs font-semibold'>
-                                        {Nickname_should_be_5_10_characters}
+                                        이름은 3~10자 이내로 입력해주세요.
                                     </span>
                                 </div>
                                 <button
                                     disabled={
                                         !address
                                         || !editedNickname
-                                        || editedNickname.length < 5
+                                        || editedNickname.length < 3
                                         || isNicknameDuplicate
                                         || loadingSetUserData
                                     }
                                     className={`
                                         ${!address
                                         || !editedNickname
-                                        || editedNickname.length < 5
+                                        || editedNickname.length < 3
                                         || isNicknameDuplicate
                                         || loadingSetUserData
                                         ? 'bg-gray-300 text-gray-400'
