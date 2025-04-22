@@ -74,6 +74,8 @@ const wallets = [
 
 const contractAddress = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; // USDT on Polygon
 
+const contractAddressDCTC = "0x76856Fd779AcE7C64297F9F662D3303e09dB269f"; // DCTC on Polygon
+
 
 function HomeContent() {
 
@@ -97,6 +99,12 @@ function HomeContent() {
     client,
     chain: polygon,
     address: contractAddress,
+  });
+
+  const contractDCTC = getContract({
+    client,
+    chain: polygon,
+    address: contractAddressDCTC,
   });
 
 
@@ -304,125 +312,63 @@ function HomeContent() {
   const [agentNft, setAgentNft] = useState<any[]>([]);
   const [loadingAgentNft, setLoadingAgentNft] = useState(false);
 
-
-  const [applicationData, setApplicationData] = useState(null);
-
-  const [cebienNft, setCebienNft] = useState([] as any[]);
-
-  const [granderbyNft, setGranderbyNft] = useState([] as any[]);
-
+  
   const [noahNft, setNoahNft] = useState([] as any[]);
   const [loadingNoahNft, setLoadingNoahNft] = useState(false);
 
 
+  const [userBalanceUsdt, setUserBalanceUsdt] = useState(0);
+  const [userBalanceDctc, setUserBalanceDctc] = useState(0);
+
+
   useEffect(() => {
 
-      const fetchNfts = async () => {
+    const fetchNfts = async () => {
 
-          setLoadingAgentNft(true);
+        setLoadingAgentNft(true);
 
 
-          const response = await fetch("/api/affiliation/getAgentNFTByWalletAddress", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
+        const response = await fetch("/api/affiliation/getAgentNFTByWalletAddress", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                walletAddress: selectUser,
+            }),
+        });
+
+        if (!response.ok) {
+            console.error("Error fetching agentNft");
+            setLoadingAgentNft(false);
+            return;
+        }
+
+        const data = await response.json();
+
+        //console.log("getAgentNft data", data);
+        /*
+        [
+          {
+
+              "name": "미자부자다",
+              "tokenUri": "https://alchemy.mypinata.cloud/ipfs/QmPdQJ5HjqvVSbqqsMno5HrAatopNw8UEBRSdg7cqEPdGu/0",
+              "image": {
+                  "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/matic-mainnet/c0dfa75257307f42ad3d6467ba13563a",
               },
-              body: JSON.stringify({
-                  walletAddress: selectUser,
-              }),
-          });
+          },
 
-          if (!response.ok) {
-              console.error("Error fetching agentNft");
-              setLoadingAgentNft(false);
-              return;
-          }
+      ]
+        */
 
-          const data = await response.json();
-
-          //console.log("getAgentNft data", data);
-          /*
-          [
-            {
-
-                "name": "미자부자다",
-                "tokenUri": "https://alchemy.mypinata.cloud/ipfs/QmPdQJ5HjqvVSbqqsMno5HrAatopNw8UEBRSdg7cqEPdGu/0",
-                "image": {
-                    "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/matic-mainnet/c0dfa75257307f42ad3d6467ba13563a",
-                },
-            },
-
-        ]
-          */
-
-          setAgentNft(data.result.ownedNfts);
-
-
-          setLoadingAgentNft(false);
-
-      };
-
-
-      const fetchCebienNfts = async () => {
-
-        setLoadingAgentNft(true);
-
-        const response = await fetch("/api/cebien/getAgentNFTByWalletAddress", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                walletAddress: selectUser,
-            }),
-        });
-
-        if (!response.ok) {
-            console.error("Error fetching agentNft");
-            setLoadingAgentNft(false);
-            return;
-        }
-
-        const data = await response.json();
-
-        setCebienNft(data.result.ownedNfts);
-
-        setLoadingAgentNft(false);
-
-      }
-
-        
-
-
-      const fetchGranderbyNfts = async () => {
-
-        setLoadingAgentNft(true);
-
-
-        const response = await fetch("/api/granderby/getAgentNFTByWalletAddress", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                walletAddress: selectUser,
-            }),
-        });
-
-        if (!response.ok) {
-            console.error("Error fetching agentNft");
-            setLoadingAgentNft(false);
-            return;
-        }
-
-        const data = await response.json();
-
-        setGranderbyNft(data.result.ownedNfts);
+        setAgentNft(data.result.ownedNfts);
 
 
         setLoadingAgentNft(false);
 
     };
+
+        
 
     const fetchNoahNfts = async () => {
 
@@ -488,6 +434,38 @@ function HomeContent() {
 
 
 
+      // get usdt balance
+      const fetchUserBalanceUsdt = async () => {
+
+        if (!selectUser) {
+          return;
+        }
+
+        const result1 = await balanceOf({
+          contract,
+          address: selectUser,
+        });
+
+        setUserBalanceUsdt( Number(result1) / 10 ** 6 );
+
+      }
+
+
+      // get dctc balance
+      const fetchUserBalanceDctc = async () => {
+
+        if (!selectUser) {
+          return;
+        }
+
+        const result2 = await balanceOf({
+          contract: contractDCTC,
+          address: selectUser,
+        });
+
+        setUserBalanceDctc( Number(result2) / 10 ** 18 );
+
+      }
 
 
 
@@ -497,13 +475,12 @@ function HomeContent() {
 
         fetchNfts();
 
-        fetchCebienNfts();
-
-        fetchGranderbyNfts();
-
         fetchNoahNfts();
 
         //fetchApplication();
+
+        fetchUserBalanceUsdt();
+        fetchUserBalanceDctc();
 
       }
 
@@ -1679,6 +1656,39 @@ function HomeContent() {
 
 
                     <div className="w-full flex flex-col gap-2 items-start justify-between">
+
+                        {/* USDT balance, DCTC balance */}
+                        <div className="w-full flex flex-col gap-2 items-start justify-start">
+                          <div className="flex flex-row gap-2 items-center justify-start">
+                            <span className="text-sm text-gray-800 font-semibold">
+                                USDT 잔고
+                            </span>
+                            <span className="text-lg text-green-500 font-semibold bg-green-100 p-2 rounded">
+                              {
+                                userBalanceUsdt
+                                  ? Number(userBalanceUsdt).toLocaleString()
+                                  : "0.00"
+                              }
+                            </span>
+                          </div>
+
+                          <div className="flex flex-row gap-2 items-center justify-start">
+                            <span className="text-sm text-gray-800 font-semibold">
+                                DCTC 잔고
+                            </span>
+                            <span className="text-lg text-green-500 font-semibold bg-green-100 p-2 rounded">
+                              {
+                              userBalanceDctc
+                                ? Number(userBalanceDctc).toLocaleString()
+                                : "0.00"
+
+                              }
+                            </span>
+                          </div>
+                        </div>
+
+
+
                         <div className="bg-green-500 text-sm text-zinc-100 p-2 rounded">
                             에이전트 NFT 목록
                         </div>
