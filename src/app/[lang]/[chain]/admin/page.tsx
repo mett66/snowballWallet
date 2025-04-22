@@ -122,95 +122,6 @@ function HomeContent() {
 
 
 
-    const [totalTradingAccountCount, setTotalTradingAccountCount] = useState(0);
-    const [totalTradingAccountBalance, setTotalTradingAccountBalance] = useState(0);
-  
-
-    const [applications, setApplications] = useState([] as any[]);
-    const [loadingApplications, setLoadingApplications] = useState(false);
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoadingApplications(true);
-            const response = await fetch("/api/agent/getApplicationsForCenter", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    walletAddress: address,
-                    center: selectCenter,
-                }),
-            });
-
-            if (!response.ok) {
-                console.error("Error fetching agents");
-
-                setApplications([]);
-                setTotalTradingAccountCount(0);
-                setTotalTradingAccountBalance(0);
-
-
-                setLoadingApplications(false);
-                return;
-            }
-
-            const data = await response.json();
-
-            //console.log("getApplicationsForCenter data", data);
-
-
-            //console.log("getApplicationsForCenter data", data);
-
-            //console.log("getApplicationsForCenter data", data);
-            /*
-            {
-                "totalCount": 19,
-                "totalTradingAccountBalance": 1044.213837901115,
-                "applications": [
-                    {
-                        "id": 178454,
-                        "userName": "oskao",
-                        "tradingAccountBalance": {
-                            "balance": "0",
-                            "timestamp": 1736386769818
-                        },
-
-                        "agentBotNft": {
-                            "name": "adsf asdf",
-                            "image": {
-                                "thumbnailUrl": "https://ipfs.io/ipfs/QmZ8",
-                              },
-                            }
-                        },
-          
-
-                        
-
-                    },
-                  ]
-            }
-            */
-
-
-            setApplications(data?.result?.applications);
-
-
-
-            setTotalTradingAccountCount( data?.result?.totalCount );
-            setTotalTradingAccountBalance( data?.result?.totalTradingAccountBalance );
-
-            setLoadingApplications(false);
-
-
-        };
-
-        if (address && selectCenter) {
-            fetchData();
-        }
-    }, [address, selectCenter]);
-
-
-
 
 
 
@@ -1310,7 +1221,7 @@ function HomeContent() {
 
                     const fetchData = async () => {
                       setLoadingUsers(true);
-                      const response = await fetch("/api/user/getAllUsersTelegramIdByCenter", {
+                      const response = await fetch("/api/user/getAllUsers", {
                           method: "POST",
                           headers: {
                               "Content-Type": "application/json",
@@ -1452,7 +1363,7 @@ function HomeContent() {
                                 <th className="p-2">지갑주소</th>
                                 <th className="p-2">레퍼럴코드</th>
                                 <th className="p-2">센터장</th>
-                                <th className="p-2">NFT</th>
+                                <th className="p-2">자산 읽어오기</th>
                                 <th className="p-2">보상내역</th>
                                 
                             </tr>
@@ -1493,11 +1404,17 @@ function HomeContent() {
                                       </div>
                                     </td>
 
-                                    <td className="p-2">
+                                    <td className="p-2"> 
                                       
                                       <div className="flex flex-row gap-2 items-center justify-start">
-                                        <span className="text-sm">
-                                          {user?.walletAddress?.slice(0, 6) + "..." + user?.walletAddress?.slice(-6)}
+                                        {/* monospace font */}
+                                        <span
+                                          className="text-sm"
+                                          style={{
+                                            fontFamily: "monospace",
+                                          }}
+                                        >
+                                          {user?.walletAddress?.slice(0, 6) + "..." + user?.walletAddress?.slice(-4)}
                                         </span>
                                         <Button
                                           onClick={() => {
@@ -1510,6 +1427,30 @@ function HomeContent() {
                                         >
                                           복사
                                         </Button>
+                                      
+
+                                        {/* polygon scan */}
+                                        <Button
+                                          onClick={() => {
+                                            window.open(
+                                              "https://polygonscan.com/address/" + user?.walletAddress
+                                            );
+                                          }}
+                                          className="
+                                            inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
+                                          "
+                                        >
+                                          <div className="flex flex-row gap-2 items-center justify-start">
+                                            <Image
+                                              src="/logo-polygon.png"
+                                              alt="Polygon Scan"
+                                              width={20}
+                                              height={20}
+                                              className="rounded"
+                                            />
+                                          </div>
+                                        </Button>
+
                                       </div>
                                       
                                     </td>
@@ -1521,7 +1462,8 @@ function HomeContent() {
                                       <div className="flex flex-row gap-2 items-center justify-start">
                                         <span className="text-sm">
                                           
-                                          {user?.start?.slice(0, 6) + "..." + user?.start?.slice(-6)}
+                                          {/*user?.start?.slice(0, 6) + "..." + user?.start?.slice(-6)*/}
+                                          {user?.start?.split("_")[1]}
 
                                         </span>
                                         <Button
