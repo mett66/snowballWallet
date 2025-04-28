@@ -505,7 +505,7 @@ export async function GET(request: NextRequest) {
     
 
 
-          /*
+          
           const batchResponse = await sendBatchTransaction(
             batchOptions
           );
@@ -515,7 +515,7 @@ export async function GET(request: NextRequest) {
           if (!batchResponse) {
             return NextResponse.error();
           }
-          */
+          
           
 
           return NextResponse.json({
