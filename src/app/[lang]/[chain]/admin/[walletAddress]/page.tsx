@@ -1275,7 +1275,7 @@ function IndexPage(
                           </div>
                       </div>
 
-                    </div>
+                  </div>
  
 
 
