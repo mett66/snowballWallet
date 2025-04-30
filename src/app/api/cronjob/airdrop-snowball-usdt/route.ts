@@ -99,8 +99,13 @@ const alchemy = new Alchemy(settings);
 export async function GET(request: NextRequest) {
 
  
+  // get prarameter from url
+  const url = request.nextUrl;
+  const searchParams = url.searchParams;
+  const tokenId = searchParams.get("tokenId");
 
-    const tokenId = BigInt("1");
+
+    //const tokenId = BigInt("0");
 
 
 
