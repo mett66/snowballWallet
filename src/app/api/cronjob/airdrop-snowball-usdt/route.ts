@@ -102,7 +102,8 @@ export async function GET(request: NextRequest) {
   // get prarameter from url
   const url = request.nextUrl;
   const searchParams = url.searchParams;
-  const tokenId = searchParams.get("tokenId");
+
+  const tokenId = searchParams.get("tokenId") || "0";
 
 
     //const tokenId = BigInt("0");
@@ -193,7 +194,8 @@ export async function GET(request: NextRequest) {
 
     const result = await alchemy.nft.getOwnersForNft(
       tokenContractAddressErc1155,
-      tokenId,
+      ///tokenId
+      BigInt(tokenId)
       
     );
 
@@ -236,7 +238,8 @@ export async function GET(request: NextRequest) {
         const balanceResult = await balanceOf({
             contract: contractErc1155,
             owner: owner,
-            tokenId: tokenId,
+            //tokenId: tokenId,
+            tokenId: BigInt(tokenId),
         });
 
         //console.log("balanceResult", balanceResult);
@@ -377,12 +380,12 @@ export async function GET(request: NextRequest) {
 
 
 
-          if (tokenId === 0n) {
+          if (BigInt(tokenId) === 0n) {
             masterAmount = masterRateTokenId0 * parseFloat(balance.toString());
             agentAmount = agentRateTokenId0 * parseFloat(balance.toString());
             centerAmount = centerRateTokenId0 * parseFloat(balance.toString());
 
-          } else if (tokenId === 1n) {
+          } else if (BigInt(tokenId) === 1n) {
             masterAmount = masterRateTokenId1 * parseFloat(balance.toString());
             agentAmount = agentRateTokenId1 * parseFloat(balance.toString());
             centerAmount = centerRateTokenId1 * parseFloat(balance.toString());
