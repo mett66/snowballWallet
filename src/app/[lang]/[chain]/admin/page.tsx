@@ -866,8 +866,26 @@ function HomeContent() {
               {/* dot */}
               <div className="w-2 h-2 bg-green-500 rounded"></div>
               <span className="text-sm text-gray-800 font-semibold">
-                  보장지급용 지갑주소
+                  보상지급용 회사 지갑주소
               </span>
+              {/*
+              new window open
+              https://polygonscan.com/address/0x35C482f619D3072c0fd6891E249f8BeCCB4e2FCb#tokentxns */}
+              <button
+                onClick={() => {
+                  
+                  window.open(
+                    "https://polygonscan.com/address/" + claimWalletAddress + "#tokentxns"
+                  );
+                  
+
+                }}
+                className="
+                  inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
+                "
+              >
+                {claimWalletAddress?.slice(0, 6) + "..." + claimWalletAddress?.slice(-4)}
+              </button>
             </div>
 
             {address && !loadingUsers && (
