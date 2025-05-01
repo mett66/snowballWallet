@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const searchParams = url.searchParams;
 
-  const tokenId = searchParams.get("tokenId") || "0";
+  const tokenId = searchParams.get("tokenId");
 
 
   if (tokenId !== "0" && tokenId !== "1") {
