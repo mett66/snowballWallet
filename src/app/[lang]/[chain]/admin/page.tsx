@@ -77,6 +77,11 @@ const contractAddress = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; // USDT on
 const contractAddressDCTC = "0x76856Fd779AcE7C64297F9F662D3303e09dB269f"; // DCTC on Polygon
 
 
+const claimWalletAddress = "0x35C482f619D3072c0fd6891E249f8BeCCB4e2FCb"; // claim wallet address
+
+
+
+
 function HomeContent() {
 
   const searchParams = useSearchParams();
@@ -159,6 +164,34 @@ function HomeContent() {
 
   } , [address, contract]);
 
+
+
+  // claim wallet usdt balance
+  const [claimWalletBalance, setClaimWalletBalance] = useState(0);
+  useEffect(() => {
+    // get the balance
+    const getClaimWalletBalance = async () => {
+      if (!claimWalletAddress) {
+          return;
+      }
+
+      const result = await balanceOf({
+        contract: contract,
+        address: claimWalletAddress,
+      });
+      //console.log(result);
+      if (!result) return;
+      setClaimWalletBalance( Number(result) / 10 ** 6 );
+    };
+    getClaimWalletBalance();
+    const interval = setInterval(() => {
+      if (claimWalletAddress) getClaimWalletBalance();
+    } , 1000);
+    return () => clearInterval(interval);
+  } , [contract]);
+
+
+  console.log("claimWalletBalance", claimWalletBalance);
 
 
 
@@ -817,355 +850,39 @@ function HomeContent() {
         */}
 
 
-        {/*
-        <div className='mb-10 w-full flex flex-col gap-4 items-start justify-center'>
-
-
-          {address && (
-
-              <div className='w-full flex flex-col gap-4 items-start justify-center'>
-
-                  <div className='w-full flex flex-row gap-2 items-center justify-between border border-gray-300 p-4 rounded-lg'>
-                  
-                      <div className=" flex flex-col xl:flex-row items-center justify-start gap-5">
-                          <Image
-                          src="/icon-wallet-live.gif"
-                          alt="Wallet"
-                          width={65}
-                          height={25}
-                          className="rounded"
-                          />
-
-                      </div>
-                      
-                      <div className="p-2 bg-zinc-800 rounded text-zinc-100 text-xl font-semibold">
-                          내 자산
-                      </div>
-                      <div className="p-2 bg-zinc-800 rounded text-zinc-100 text-xl font-semibold">
-                          {
-                              Number(balance).toFixed(2)
-                          } USDT
-                      </div>
-                  </div>
-
-
-                  {totalTradingAccountBalance > 0 && (
-                  <div className='w-full flex flex-col gap-2
-                  items-start justify-between border border-gray-300 p-4 rounded-lg'>
-                      <div className="w-full flex flex-row items-center gap-2">
-                          <span className='w-1/2 text-sm text-gray-800 font-semibold'>
-                              시작된 Bot: 
-                          </span>
-                          <span className='
-                            w-1/2 text-right
-                            text-xl text-green-500 font-semibold bg-green-100 p-2 rounded'>
-                          
-                          {
-                              applications.filter((item) => item.accountConfig?.data.roleType === "2").length
-                          }
-                          </span>
-                      </div>
-
-                      <div className="w-full flex flex-row items-center gap-2">
-                          <span className='w-1/2 text-sm font-semibold text-gray-800'>
-                              총 거래 계정 잔고: 
-                          </span>
-                          <span className='
-                            w-1/2 text-right
-                            text-xl text-green-500 font-semibold bg-green-100 p-2 rounded'>
-                              {
-                                  Number(totalTradingAccountBalance).toLocaleString('en-US', {
-                                      style: 'currency',
-                                      currency: 'USD'
-                                  })
-                              }
-                          </span>
-                      </div>
-                    </div>
-                  )}
 
 
 
-              </div>
-
-          )}
-
-        </div>
-        */}
-
-
-
-
-
-
-
-        {/* if marketingCenter is "owin", link to @magic_wallet_cs */}
-        {marketingCenter === "owin" && (
-          <div className=" w-full flex flex-col gap-2 items-start justify-between border border-gray-300 p-4 rounded-lg">
-            <div className="bg-green-500 text-sm text-zinc-100 p-2 rounded">
-              {marketingCenter}{' '}마케팅 센터 텔레그램
-            </div>
-            <div className="flex flex-row gap-2 items-center justify-between">
-              <Button
-                onClick={() => (window as any).Telegram.WebApp.openLink(`https://t.me/magic_wallet_cs`)}
-                className="
-                  inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                "
-              >
-                @magic_wallet_cs 텔레그램
-              </Button>
-              {/* copy telegram link */}
-              <Button
-                onClick={() => {
-                  navigator.clipboard.writeText(`https://t.me/magic_wallet_cs`);
-                  alert(`https://t.me/magic_wallet_cs 복사되었습니다.`);
-                }}
-                className="
-                  inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                "
-              >
-                복사
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* if marketingCenter is "exms", link to @exms_cs */}
-        {marketingCenter === "exms" && (
-          <div className=" w-full flex flex-col gap-2 items-start justify-between border border-gray-300 p-4 rounded-lg">
-            <div className="bg-green-500 text-sm text-zinc-100 p-2 rounded">
-              {marketingCenter}{' '}마케팅 센터 텔레그램
-            </div>
-            <div className="flex flex-row gap-2 items-center justify-between">
-              <Button
-                onClick={() => (window as any).Telegram.WebApp.openLink(`https://t.me/exms_cs`)}
-                className="
-                  inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                "
-              >
-                @exms_cs 텔레그램
-              </Button>
-              {/* copy telegram link */}
-              <Button
-                onClick={() => {
-                  navigator.clipboard.writeText(`https://t.me/exms_cs`);
-                  alert(`https://t.me/exms_cs 복사되었습니다.`);
-                }}
-                className="
-                  inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                "
-              >
-                복사
-              </Button>
-            </div>
-          </div>
-        )}
-        
-
-              {/* refresh button */}
-
-              
-
-
-        {/* center list and select center */}
-        {/* radio checkboxes */}
-        {/*
-        <div className='mb-10 w-full flex flex-col gap-2 items-start justify-between border border-gray-300 p-4 rounded-lg'>
-            
-
-            <div className="flex flex-row gap-2 items-center justify-between">
-              <div className="bg-green-500 text-sm text-zinc-100 p-2 rounded">
-                  텔레그램 센터 선택
-              </div>
-
-            </div>
-            
-            <div className='w-full flex flex-col gap-2 items-start justify-between'>
-                {loadingCenters ? (
-                  <div className="w-full flex flex-col items-center justify-center">
-                      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-300"></div>
-                  </div>
-                ) : (
-                  <div className='w-full grid grid-cols-1 xl:grid-cols-3 gap-2 items-start justify-between'>
-                      {centerList.map((center, index) => (
-                          <div
-                            key={index}
-                            className={`
-                              flex flex-row gap-2 items-center justify-between
-                              p-2 rounded
-                              cursor-pointer
-                              ${selectCenter === center._id ? "bg-green-500 text-zinc-100" : "bg-zinc-800 text-zinc-100"}
-                            `}
-                              
-                              
-                          >
-                              <input
-                                  type="radio"
-                                  id={center._id}
-                                  name="center"
-                                  value={center._id}
-                                  checked={selectCenter === center._id}
-                                  onChange={() => {
-                                      setSelectCenter(center._id);
-                                      setSelectUser(null);
-                                      setUsers([]);
-
-                                  }}
-                              />
-                              <div className="flex flex-row gap-2 items-center justify-between">
-                                <span className="text-sm bg-gray-800 text-zinc-100 p-2 rounded">
-                                    @{center._id}
-                                </span>
-                                <span className="text-sm text-gray-800 font-semibold bg-gray-100 p-2 rounded">
-                                    {center.count}
-                                </span>
-                              </div>
-
-                              <div className="flex flex-col xl:flex-col gap-2 items-start justify-start">
-
-                                <Button
-                                  onClick={() => (window as any).Telegram.WebApp.openLink(`https://t.me/${center._id}`)}
-                                  className="
-                                    inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-xs font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                                  "
-                                >
-                                  텔레그램
-                                </Button>
-
-                                <Button
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(`https://t.me/${center._id}`);
-                                    alert(`https://t.me/${center._id} 복사되었습니다.`);
-                                  }}
-                                  className="
-                                    inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-xs font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white
-                                  "
-                                >
-                                  복사
-                                </Button>
-                              </div>
-
-                          </div>
-                      ))}
-                  </div>
-                )}
-            </div>
-
-
-        </div>
-        */}
-      
-
-        {/* send to user telegramId */}
-        {/* input amountSend */}
-
-
-        {false && address && (
-
-          <div className="flex flex-col xl:flex-row gap-2 items-center justify-between">
-
-            <div className='mb-10 w-full flex flex-col gap-2 items-start justify-between border border-gray-300 p-4 rounded-lg'>
-              
-
-              <div className="flex flex-row gap-2 items-center justify-between">
-                {/* dot */}
-                <div className="w-2 h-2 bg-green-500 rounded"></div>
-                <span className="text-sm text-gray-800 font-semibold">
-                    홀짝 게임 전송
-                </span>
-              </div>
-
-              <div className="w-full flex flex-row gap-2 items-start justify-between">
-                  <input
-                    disabled={sendingRoulette}
-                    onChange={(e) => {
-                      setSendRouletteAmount(Number(e.target.value));
-                    }}
-                    type="number"
-                    placeholder="전송 USDT"
-                    className="w-36 p-2 rounded border border-gray-300"
-                  />
-                  <input
-                    disabled={sendingRoulette}
-                    onChange={(e) => {
-                      setSendRouletteTelegramId(e.target.value);
-                    }}
-                    value={sendRouletteTelegramId}
-                    type="text"
-                    placeholder="텔레그램 ID"
-                    className="w-36 p-2 rounded border border-gray-300"
-                  />
-                  <Button
-                    disabled={sendingRoulette}
-                    onClick={() => {
-                      // send
-                      confirm("전송하시겠습니까?") && sendRoulette();
-                    }}
-                    className={`${sendingRoulette ? "bg-gray-400" : "bg-green-500"} text-zinc-100 p-2 rounded`}
-                  >
-                    {sendingRoulette ? "전송중..." : "전송"}
-                  </Button>
-              </div>
-            </div>
-
-
-            <div className='mb-10 w-full flex flex-col gap-2 items-start justify-between border border-gray-300 p-4 rounded-lg'>
-              
-
-              <div className="flex flex-row gap-2 items-center justify-between">
-                {/* dot */}
-                <div className="w-2 h-2 bg-green-500 rounded"></div>
-                <span className="text-sm text-gray-800 font-semibold">
-                    USDT 전송
-                </span>
-              </div>
-
-              <div className="w-full flex flex-row gap-2 items-start justify-between">
-                  <input
-                    disabled={loadingSend}
-                    onChange={(e) => {
-                      setAmountSend(Number(e.target.value));
-                    }}
-                    type="number"
-                    placeholder="전송 USDT"
-                    className="w-36 p-2 rounded border border-gray-300"
-                  />
-                  <input
-                    disabled={loadingSend}
-                    onChange={(e) => {
-                      setToTelegramId(e.target.value);
-                    }}
-                    value={toTelegramId}
-                    type="text"
-                    placeholder="텔레그램 ID"
-                    className="w-36 p-2 rounded border border-gray-300"
-                  />
-                  <Button
-                    disabled={loadingSend}
-                    onClick={() => {
-                      // send
-                      confirm("전송하시겠습니까?") && send();
-                    }}
-                    className={`${loadingSend ? "bg-gray-400" : "bg-green-500"} text-zinc-100 p-2 rounded`}
-                  >
-                    {loadingSend ? "전송중..." : "전송"}
-                  </Button>
-              </div>
-            </div>
-
-          </div>
-        )}
 
 
 
         <div className='mb-10 w-full flex flex-col gap-2 items-start justify-between'>
 
-          {selectCenter && (
-            <span className="bg-green-500 text-xl text-zinc-100 p-2 rounded">
-                {"@"+selectCenter}
-            </span>
-          )}
+   
+          {/* claim wallet address and balance */}
+          <div className="w-full flex flex-row gap-2 items-start justify-between">
 
+            <div className="flex flex-row gap-2 items-center justify-start">
+              {/* dot */}
+              <div className="w-2 h-2 bg-green-500 rounded"></div>
+              <span className="text-sm text-gray-800 font-semibold">
+                  보장지급용 지갑주소
+              </span>
+            </div>
+
+            {address && !loadingUsers && (
+
+              <div className="flex flex-row gap-2 items-center justify-between">
+
+                {/* 회원수 */}
+                <span className="text-lg text-gray-800 font-semibold bg-gray-100 p-2 rounded">
+                  잔고: {claimWalletBalance} USDT
+                </span>
+
+              </div>
+
+            )}
+          </div>
 
 
           <div className="w-full flex flex-row gap-2 items-start justify-between">
