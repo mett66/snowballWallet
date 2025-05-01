@@ -106,6 +106,12 @@ export async function GET(request: NextRequest) {
   const tokenId = searchParams.get("tokenId") || "0";
 
 
+  if (tokenId !== "0" && tokenId !== "1") {
+    return NextResponse.json({
+      error: "tokenId is not 0 or 1",
+    });
+  }
+
     //const tokenId = BigInt("0");
 
 
