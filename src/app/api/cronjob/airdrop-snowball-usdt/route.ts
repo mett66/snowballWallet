@@ -105,6 +105,9 @@ export async function GET(request: NextRequest) {
 
   const tokenId = searchParams.get("tokenId");
 
+  console.log("tokenId: ", tokenId);
+  
+
 
   if (tokenId !== "0" && tokenId !== "1") {
     return NextResponse.json({
