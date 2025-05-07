@@ -13,7 +13,7 @@ import {
 
 
 import {
-
+  checkReferralRewardsDay,
   insertReferralRewards,
 } from '@lib/api/reward';
 
@@ -129,6 +129,11 @@ export async function GET(request: NextRequest) {
       return;
     }
     */
+
+
+
+
+
 
 
     const client = createThirdwebClient({
@@ -273,6 +278,36 @@ export async function GET(request: NextRequest) {
 
 
           const masterWalletAddress = owner;
+
+
+
+
+
+          // check date
+          // if exists, then continue
+          const resultCheckDate = await checkReferralRewardsDay({
+            masterWalletAddress: masterWalletAddress,
+            tokenId: tokenId,
+            contractAddress: tokenContractAddressErc1155,
+          });
+
+
+          if (resultCheckDate) {
+            console.log("resultCheckDate: ", resultCheckDate);
+            continue;
+          }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
           // getOneByWalletAddress

@@ -22,6 +22,69 @@ import clientPromise from '../mongodb';
           const result = await insertReferralRewards(data);
           */
 
+
+
+
+// daily check for insertReferralRewards
+/*
+  const collectionDay = client.db('vienna').collection('referral_rewards_day');
+
+  // check duplicat date day and masterWalletAddress
+
+  const checkDate = await collectionDay.findOne<any>(
+    {
+      createdAtDay: new Date().toISOString().slice(0, 10),
+      masterWalletAddress: data.masterWalletAddress,
+      contractAddress: contractAddress,
+      tokenId: tokenId,
+    }
+  );
+
+  return true if checkDate is null
+  return false if checkDate is not null
+*/
+
+export async function checkReferralRewardsDay(data: any) {
+
+
+  if (!data.masterWalletAddress || !data.contractAddress || !data.tokenId) {
+
+    return null;
+  }
+
+  const masterWalletAddress = data.masterWalletAddress;
+  const contractAddress = data.contractAddress;
+  const tokenId = data.tokenId;
+
+
+  const client = await clientPromise;
+
+  const collectionDay = client.db('vienna').collection('referral_rewards_day');
+
+  const checkDate = await collectionDay.findOne<any>(
+    {
+      createdAtDay: new Date().toISOString().slice(0, 10),
+      masterWalletAddress: masterWalletAddress,
+      contractAddress: contractAddress,
+      tokenId: tokenId,
+    }
+  );
+
+  if (checkDate) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+
+  // return true if checkDate is null
+
+
+
+
+
 // insertReferralRewards
 
 export async function insertReferralRewards(data: any) {
@@ -35,6 +98,8 @@ export async function insertReferralRewards(data: any) {
   }
 
   const contractAddress = data.contractAddress;
+
+
   const tokenId = data.tokenId;
   const balance = data.balance;
 
