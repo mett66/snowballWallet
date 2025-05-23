@@ -156,7 +156,7 @@ const contractAddressEthereum = "0xdac17f958d2ee523a2206206994597c13d831ec7"; //
 
 
 
-const contractAddressDCTC = "0x76856Fd779AcE7C64297F9F662D3303e09dB269f"; // DCTC on Polygon
+const contractAddressKCT = "0xeb9198c8342BcB29A1Fe41d45A6CF6A3Ac568a0E"; // KCT on Polygon
 
 
 const erc1155ContractAddress = "0x796f8867E6D474C1d63e4D7ea5f52B48E4bA83D6";
@@ -238,13 +238,13 @@ function IndexPage(
 
 
 
-  const contractDCTC = getContract({
+  const contractKCT = getContract({
     // the client you have created via `createThirdwebClient()`
     client,
     // the chain the contract is deployed on
     chain: params.chain === "arbitrum" ? arbitrum : params.chain === "polygon" ? polygon : params.chain === "ethereum" ? ethereum : polygon,
     // the contract's address
-    address: contractAddressDCTC,
+    address: contractAddressKCT,
   });
 
 
@@ -963,7 +963,7 @@ function IndexPage(
       const getDctcBalance = async () => {
 
         const balance = await balanceOf({
-          contract: contractDCTC,
+          contract: contractKCT,
           address: address,
         });
 
@@ -971,12 +971,12 @@ function IndexPage(
 
       };
 
-      address && contractDCTC && getDctcBalance();
+      address && contractKCT && getDctcBalance();
 
       // timer
       
       const interval = setInterval(() => {
-        address && contractDCTC && getDctcBalance();
+        address && contractKCT && getDctcBalance();
       }, 10000);
 
       return () => clearInterval(interval);
@@ -984,7 +984,7 @@ function IndexPage(
   } , [address]);
 
   //console.log("address", address);
-  //console.log("contractDCTC", contractDCTC);
+  //console.log("contractKCT", contractKCT);
 
 
 
@@ -1587,28 +1587,28 @@ function IndexPage(
                 {/* dctc logo */}
                 <Image
                   src="/logo-dctc.png"
-                  alt="DCTC"
+                  alt="KCT"
                   width={35}
                   height={35}
                   className="rounded-full w-8 h-8 xl:w-10 xl:h-10"
                 />
                 <span className="text-sm md:text-xl font-bold text-gray-600">
-                  DCTC
+                  KCT
                 </span>
                 <div className="w-full text-sm font-bold text-zinc-800 text-right">
                   {Number(dctcBalance).toFixed(2)}
                 </div>
                 <p className="w-12 text-sm text-gray-800 font-bold">
-                  DCTC
+                  KCT
                 </p>
                 <button
                   onClick={() => {
                     params.chain === "tron" ?
                     router.push(
-                      "/" + params.lang + "/" + params.chain + "/send-tron-token/?token=DCTC"
+                      "/" + params.lang + "/" + params.chain + "/send-tron-token/?token=KCT"
                     ) :
                     router.push(
-                      "/" + params.lang + "/" + params.chain + "/send-token/?wallet=" + wallet + "&token=DCTC"
+                      "/" + params.lang + "/" + params.chain + "/send-token/?wallet=" + wallet + "&token=KCT"
                       + "&agent=" + agent + "&tokenId=" + agentNumber
                     );
                   }}
